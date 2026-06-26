@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand */
+  --color-brand: #0F6E56;
+  --color-brand-light: #1D9E75;
+  --color-brand-muted: #E1F5EE;
+  --color-brand-hover: #0A5A45;
+
+  /* Backgrounds */
+  --color-bg-page: #EDF0F3;
+  --color-bg-card: #FFFFFF;
+  --color-bg-input: #F8FAFB;
+
+  /* Text */
+  --color-ink: #1F2937;
+  --color-ink-secondary: #4B5563;
+  --color-ink-muted: #9CA3AF;
+
+  /* Borders */
+  --color-border: #F1F4F7;
+  --color-border-medium: #E5E7EB;
+
+  /* Status */
+  --color-success: #1D9E75;
+  --color-success-bg: #ECFDF5;
+  --color-success-text: #065F46;
+  --color-error: #E24B4A;
+  --color-error-bg: #FEF2F2;
+  --color-error-text: #991B1B;
+  --color-warning: #EF9F27;
+  --color-warning-bg: #FFFBEB;
+  --color-warning-text: #92400E;
+  --color-info: #378ADD;
+  --color-info-bg: #EFF6FF;
+
+  /* Font */
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-page);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-light);
+  outline-offset: 2px;
+}
