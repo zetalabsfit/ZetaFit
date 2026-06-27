@@ -94,7 +94,7 @@ export default async function AdminPage() {
 
   // Platform totals
   const totalMRR = gyms.filter(g => g.status === 'active').reduce((s, g) => {
-    const planPrice = { starter: 999, growth: 1999, pro: 3499 }[g.plan] ?? 999
+    const planPrice = ({ starter: 999, growth: 1999, pro: 3499 } as Record<string, number>)[g.plan] ?? 999
     return s + planPrice
   }, 0)
 

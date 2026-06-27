@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { Check, Plus, Star, Pencil, X } from 'lucide-react'
 
 interface Plan {
-  member_count?: number
   id: string
   name: string
   duration_days: number
