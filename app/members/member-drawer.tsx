@@ -33,6 +33,7 @@ interface Member {
 interface Props {
   member: Member
   plans: Plan[]
+  initialTab?: 'overview' | 'edit' | 'renew'
   onClose: () => void
   onUpdated: (updated: Member) => void
 }
@@ -63,8 +64,8 @@ function durationLabel(days: number) {
   return `${days} days`
 }
 
-export default function MemberDrawer({ member, plans, onClose, onUpdated }: Props) {
-  const [tab, setTab] = useState<Tab>('overview')
+export default function MemberDrawer({ member, plans, initialTab = 'overview', onClose, onUpdated }: Props) {
+  const [tab, setTab] = useState<Tab>(initialTab)
 
   // Edit form state
   const [editName, setEditName] = useState(member.full_name)

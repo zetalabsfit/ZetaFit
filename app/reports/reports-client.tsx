@@ -1,4 +1,5 @@
 'use client'
+import RemindButton from '@/app/dashboard/remind-button'
 import {
   IndianRupee, TrendingUp, TrendingDown, Minus,
   CalendarCheck, Users, Download, Clock,
@@ -335,9 +336,12 @@ export default function ReportsClient({
                       </div>
                       <span className="hidden text-sm text-ink-secondary lg:block">{m.membership_plans?.name}</span>
                       <span className="hidden text-sm text-ink-muted lg:block">{formatDate(m.end_date)}</span>
-                      <span className={`text-sm font-semibold ${days <= 3 ? 'text-red-500' : days <= 7 ? 'text-orange-500' : 'text-yellow-600'}`}>
-                        {days === 0 ? 'Today' : days === 1 ? 'Tomorrow' : `${days}d`}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-semibold ${days <= 3 ? 'text-red-500' : days <= 7 ? 'text-orange-500' : 'text-yellow-600'}`}>
+                          {days === 0 ? 'Today' : days === 1 ? 'Tomorrow' : `${days}d`}
+                        </span>
+                        <RemindButton phone={m.members?.phone ?? ''} name={m.members?.full_name ?? ''} />
+                      </div>
                     </li>
                   )
                 })}

@@ -31,9 +31,20 @@ export default async function PaymentsPage() {
 
   console.log('[Payments] Fetched:', payments?.length ?? 0, 'payments')
 
+
+  // Expiring in 7 days (for sidebar badge)
+  const today = new Date().toISOString().split('T')[0]
+  const in7Days = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0]
+  const { data: expiringData } = await supabase
+    .from('member_subscriptions')
+    .select('id', { count: 'exact' })
+    .gte('end_date', today)
+    .lte('end_date', in7Days)
+    .eq('status', 'active')
+  const expiringCount = expiringData?.length ?? 0
   return (
     <div className="flex min-h-screen">
-      <Sidebar gymName={org?.name} orgPlan={org?.platform_plan} />
+      <Sidebar gymName={org?.name} orgPlan={org?.platform_plan} expiringCount={expiringCount} />
       <PaymentsClient payments={(payments ?? []) as unknown as any[]} members={members ?? []} collectedThisMonth={collectedThisMonth} pendingDues={pendingDues} />
     </div>
   )

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Check, Plus, Star, Pencil, X } from 'lucide-react'
 
 interface Plan {
+  member_count?: number
   id: string
   name: string
   duration_days: number
@@ -90,6 +91,25 @@ export default function PlansClient({ plans: initialPlans }: PlansClientProps) {
     setPlans(prev => [...prev, json.plan])
     closeModal()
     setSaving(false)
+  }
+
+  async function handleDuplicate(plan: Plan) {
+    const res = await fetch('/api/plans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: `${plan.name} (Copy)`,
+        duration_days: plan.duration_days,
+        price: plan.price,
+        gst_rate: 18,
+        features: plan.features ?? [],
+        is_popular: false,
+      }),
+    })
+    const json = await res.json()
+    if (res.ok && json.plan) {
+      setPlans(prev => [...prev, { ...json.plan, member_count: 0 }])
+    }
   }
 
   return (

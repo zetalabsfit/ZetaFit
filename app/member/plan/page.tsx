@@ -106,14 +106,11 @@ export default async function MemberPlanPage() {
           </div>
         )}
 
-        {/* Renew nudge */}
-        <div className="flex items-center gap-3 rounded-2xl border border-border bg-bg-card p-4 shadow-sm">
-          <RefreshCw className="h-5 w-5 shrink-0 text-brand" />
-          <div>
-            <p className="text-sm font-semibold text-ink">Need to renew?</p>
-            <p className="text-xs text-ink-muted">Visit the front desk or contact your gym.</p>
-          </div>
-        </div>
+        {/* Renew now CTA */}
+        <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand py-3.5 text-sm font-bold text-white hover:bg-brand-hover shadow-sm">
+          <RefreshCw className="h-4 w-4" /> Renew now
+        </button>
+        <p className="text-center text-xs text-ink-muted -mt-2">Contact the front desk to process your renewal</p>
 
         {/* Payment history */}
         <div className="rounded-2xl border border-border bg-bg-card overflow-hidden shadow-sm">

@@ -33,9 +33,20 @@ export default async function MembersPage() {
 
   console.log('[Members] Fetched:', members?.length ?? 0, 'members,', plans?.length ?? 0, 'plans')
 
+
+  // Expiring in 7 days (for sidebar badge)
+  const today = new Date().toISOString().split('T')[0]
+  const in7Days = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0]
+  const { data: expiringData } = await supabase
+    .from('member_subscriptions')
+    .select('id', { count: 'exact' })
+    .gte('end_date', today)
+    .lte('end_date', in7Days)
+    .eq('status', 'active')
+  const expiringCount = expiringData?.length ?? 0
   return (
     <div className="flex min-h-screen">
-      <Sidebar gymName={org?.name} orgPlan={org?.platform_plan} />
+      <Sidebar gymName={org?.name} orgPlan={org?.platform_plan} expiringCount={expiringCount} />
       <MembersClient members={(members ?? []) as any[]} plans={plans ?? []} />
     </div>
   )

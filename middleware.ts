@@ -2,7 +2,9 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import type { CookieOptions } from '@supabase/ssr'
 
-const PUBLIC = ['/login', '/auth/', '/member/login', '/api/auth/', '/join/']
+const PUBLIC = ['/login', '/auth/', '/member/login', '/api/auth/', '/join/', '/w/', '/trial']
+const MEMBER_ONLY = ['/member/']
+const OWNER_PAGES = ['/dashboard', '/members', '/plans', '/payments', '/attendance', '/reports', '/settings', '/workouts', '/invoice', '/admin']
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
@@ -28,7 +30,7 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const isPublic = PUBLIC.some(r => pathname.startsWith(r))
 
-  // Unauthenticated — redirect to appropriate login
+  // Unauthenticated
   if (!user && !isPublic) {
     if (pathname.startsWith('/member/')) {
       return NextResponse.redirect(new URL('/member/login', request.url))
@@ -36,14 +38,31 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Authenticated on owner login — go to dashboard
+  // Authenticated on owner login → dashboard
   if (user && pathname === '/login') {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  // Authenticated on member login — only redirect if no error param
+  // Authenticated on member login → only redirect if no error
   if (user && pathname === '/member/login' && !searchParams.get('error')) {
     return NextResponse.redirect(new URL('/member/home', request.url))
+  }
+
+  // Trial gating — check for owner pages only
+  if (user && OWNER_PAGES.some(p => pathname.startsWith(p))) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('organizations(platform_status, platform_trial_ends_at)')
+      .eq('id', user.id)
+      .single()
+
+    const org = profile?.organizations as any
+    if (org?.platform_status === 'trial' && org?.platform_trial_ends_at) {
+      const trialEnds = new Date(org.platform_trial_ends_at)
+      if (trialEnds < new Date()) {
+        return NextResponse.redirect(new URL('/trial', request.url))
+      }
+    }
   }
 
   // Root redirect

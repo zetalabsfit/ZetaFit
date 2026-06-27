@@ -1,15 +1,16 @@
 'use client'
 import Link from 'next/link'
-import { Home, Star, CalendarCheck, LogOut } from 'lucide-react'
+import { Home, Star, CalendarCheck, LogOut, Dumbbell, BarChart2, } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-type Page = 'home' | 'plan' | 'attendance'
+type Page = 'home' | 'plan' | 'attendance' | 'workouts' | 'stats'
 
 const NAV = [
   { key: 'home' as Page, href: '/member/home', label: 'Home', icon: Home },
-  { key: 'plan' as Page, href: '/member/plan', label: 'My plan', icon: Star },
-  { key: 'attendance' as Page, href: '/member/attendance', label: 'Attendance', icon: CalendarCheck },
+  { key: 'stats' as Page, href: '/member/stats', label: 'Stats', icon: BarChart2 },
+  { key: 'workouts' as Page, href: '/member/workouts', label: 'Workouts', icon: Dumbbell },
+  { key: 'plan' as Page, href: '/member/plan', label: 'My Plan', icon: Star },
 ]
 
 interface Props {
